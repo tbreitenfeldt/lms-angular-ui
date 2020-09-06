@@ -1,0 +1,22 @@
+<div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/borrower/checkin']">Branches</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/borrower/checkout']">Checkout</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/borrower/checkin']">Checkin</a>
+          </li>
+        </ul>
+      </div>
+  </nav>
+  <div *ngIf="state$ | async as state" class="home">
+    <app-branches [branches$]="state.branches" (selectBranch)="selectBranch($event)" class="branches"></app-branches>
+    <app-return [loans$]="state.loans" (checkinLoan)="checkinLoan($event)" class="returns"></app-return>
+    <app-checkout [branch$]="state.branch" [books$]="state.books" (checkoutBook)="checkoutBook($event)" class="checkout"></app-checkout>
+  </div>
+</div>

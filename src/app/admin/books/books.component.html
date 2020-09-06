@@ -1,0 +1,167 @@
+<h2>
+  Books
+</h2>
+
+<table class="table table-dark">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Publisher</th>
+      <th>Genre</th>
+      <th></th>
+      <th>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="open(editBookModal)"
+        >
+          Add
+        </button>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let book of pagedItems">
+      <td>{{ book.title }}</td>
+      <td>{{ getAuthors(book) }}</td>
+      <td>{{ book.publisher.name }}</td>
+      <td>{{ getGenres(book) }}</td>
+      <td>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="open(editBookModal, book)"
+        >
+          Edit
+        </button>
+      </td>
+      <td>
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="deleteBook(book.id)"
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="books.length > 0" class="ds-l-row ds-u-margin-top--3">
+  <div class="ds-l-col--9">
+    <ngb-pagination
+      [collectionSize]="books.length"
+      [(page)]="pager.currentPage"
+      [maxSize]="5"
+      [pageSize]="itemsPerPage"
+      [boundaryLinks]="true"
+      (pageChange)="setPage($event)"
+    ></ngb-pagination>
+  </div>
+</div>
+
+<ng-template #editBookModal let-c="close" let-d="dismiss">
+  <div class="ds-c-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ selectedBook ? "Edit" : "Add" }} Book</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="d()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #f="ngForm" (ngSubmit)="submit()">
+          <div class="form-group">
+            <label for="title" class="col-form-label">Title </label>
+            <input
+              class="form-control"
+              name="title"
+              id="title"
+              [(ngModel)]="selectedBook.title"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="author" class="col-form-label">Authors </label>
+            <div>
+              <span
+                class="badge badge-light"
+                *ngFor="let author of selectedBook.authors"
+                >{{ author.name }}
+                <button class="removeBtn" (click)="removeAuthor(author)">
+                  <fa-icon [icon]="faTimesCircle"></fa-icon>
+                </button>
+              </span>
+              <select
+                name="selectedAuthor"
+                class="form-control"
+                [(ngModel)]="selectedAuthor"
+                (change)="addAuthor()"
+                [compareWith]="compareItems"
+              >
+                <option [value]="null">Add an author</option>
+                <option
+                  *ngFor="let author of getAvailableAuthors()"
+                  [ngValue]="author"
+                  >{{ author.name }}</option
+                >
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="publisher" class="col-form-label">Publisher </label>
+            <select
+              name="publisher"
+              class="form-control"
+              required
+              [(ngModel)]="selectedPublisher"
+              [compareWith]="compareItems"
+            >
+              <option [value]="null" disabled>Choose a publisher</option>
+              <option
+                *ngFor="let publisher of publishers"
+                [ngValue]="publisher"
+                >{{ publisher.name }}</option
+              >
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="genre" class="col-form-label">Genres </label>
+            <div>
+              <span
+                class="badge badge-light"
+                *ngFor="let genre of selectedBook.genres"
+                >{{ genre.name }}
+                <button class="removeBtn" (click)="removeGenre(genre)">
+                  <fa-icon [icon]="faTimesCircle"></fa-icon></button
+              ></span>
+              <select
+                name="selectedGenre"
+                class="form-control"
+                [(ngModel)]="selectedGenre"
+                [compareWith]="compareItems"
+                (change)="addGenre()"
+              >
+                <option [value]="null">Add an genre</option>
+                <option
+                  *ngFor="let genre of getAvailableGenres()"
+                  [ngValue]="genre"
+                  >{{ genre.name }}</option
+                >
+              </select>
+            </div>
+          </div>
+          <input type="submit" class="btn btn-primary" value="Save" />
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>

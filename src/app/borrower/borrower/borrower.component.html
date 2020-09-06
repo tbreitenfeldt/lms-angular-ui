@@ -1,0 +1,21 @@
+<div>
+  <div *ngIf="state$ | async; else login">
+    <app-home [state$]="state$"></app-home>
+  </div>
+  <ng-template #login>
+    <div>
+      <h2>Welcome to GCIT-LMS</h2>
+      <div class="form-wrapper">
+        <form #cardNumForm="ngForm" (ngSubmit)="onSubmit(cardNumForm)">
+          <div class="form-group">
+            <label for="card-num">Library card number:</label>
+            <input ngModel id="username" name="username" type="text" autocomplete="username" hidden>
+            <input ngModel id="card-num" name="cardNum" type="password" autocomplete="new-password" class="form-control" aria-describedby="enter-card-number" required>
+            <small id="enter-card-number" class="form-text text-muted">Please enter your card number to continue.</small>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </ng-template>
+</div>

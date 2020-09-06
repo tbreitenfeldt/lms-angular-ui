@@ -1,0 +1,97 @@
+<h3>Library Branches</h3>
+
+<div *ngIf="isLoading" class="spinner-border" role="status">
+  <span className="sr-only">Loading...</span>
+</div>
+
+<div *ngIf="!isLoading">
+  <table class="table table-dark">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let branch of pagedItems">
+        <th scope="row">{{ branch.name }}</th>
+        <td>{{ branch.address }}</td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="open(editLibraryBranchModal, branch)"
+          >
+            Edit
+          </button>
+        </td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-primary"
+            routerLink="./branches/{{ branch.id }}/book-copies"
+          >
+            Manage Book Copies
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="totalItems > 0" class="ds-l-row ds-u-margin-top--3">
+    <div class="ds-l-col--9">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="pager.currentPage"
+        [maxSize]="5"
+        [pageSize]="itemsPerPage"
+        [boundaryLinks]="true"
+        (pageChange)="setPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>
+
+<ng-template #editLibraryBranchModal let-c="close" let-d="dismiss">
+  <div class="ds-c-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Update Library Branch</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="d()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #f="ngForm" (ngSubmit)="updateLibraryBranch(f)">
+          <div class="form-group">
+            <label for="branchNameInput" class="col-form-label">Name:</label>
+            <input
+              class="form-control"
+              name="name"
+              id="branchNameInput"
+              [(ngModel)]="selectedBranch.name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="branchAddressInput" class="col-form-label"
+              >Address:</label
+            >
+            <input
+              class="form-control"
+              name="address"
+              id="branchAddressInput"
+              [(ngModel)]="selectedBranch.address"
+            />
+          </div>
+          <input type="submit" class="btn btn-primary" value="Save" />
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,112 @@
+<h4>
+  <span *ngIf="branch">{{ branch.name }}</span>
+  Book Copies
+</h4>
+<p *ngIf="branch">{{ branch.address }}</p>
+
+<div
+  *ngIf="isLoading.branch || isLoading.bookCopies"
+  class="spinner-border"
+  role="status"
+>
+  <span className="sr-only">Loading...</span>
+</div>
+
+<div *ngIf="!isLoading.branch && !isLoading.bookCopies">
+  <table class="table table-dark">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Authors</th>
+        <th>Publisher</th>
+        <th>Genres</th>
+        <th>Number of Copies</th>
+        <th></th>
+        <th>
+          <button type="button" class="btn btn-primary" routerLink="../books">
+            Add Book to Library
+          </button>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let bookCopy of pagedItems">
+        <th scope="row">{{ bookCopy.id.book.title }}</th>
+        <td>
+          <span *ngFor="let a of bookCopy.id.book.authors">{{ a.name }} </span>
+        </td>
+        <td>{{ bookCopy.id.book.publisher.name }}</td>
+        <td>
+          <span *ngFor="let g of bookCopy.id.book.genres">{{ g.name }} </span>
+        </td>
+        <td>{{ bookCopy.amount }}</td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="open(editBookCopyModal, bookCopy)"
+          >
+            Edit
+          </button>
+        </td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="deleteBookCopy(bookCopy)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="totalItems > 0" class="ds-l-row ds-u-margin-top--3">
+    <div class="ds-l-col--9">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="pager.currentPage"
+        [maxSize]="5"
+        [pageSize]="itemsPerPage"
+        [boundaryLinks]="true"
+        (pageChange)="setPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>
+
+<ng-template #editBookCopyModal let-c="close" let-d="dismiss">
+  <div class="ds-c-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit {{ selectedBookCopy.id.book.title }}</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="d()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="updateBookCopy()">
+          <div class="form-group">
+            <label for="bookCopyAmountInput" class="col-form-label"
+              >Number of Copies:
+            </label>
+            <input
+              class="form-control"
+              name="amount"
+              id="bookCopyAmountInput"
+              [(ngModel)]="selectedBookCopy.amount"
+            />
+          </div>
+          <input type="submit" class="btn btn-primary" value="Save" />
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>

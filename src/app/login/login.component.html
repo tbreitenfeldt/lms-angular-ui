@@ -1,0 +1,38 @@
+<h2>Login</h2>
+
+<form #f="ngForm" (ngSubmit)="login(f)">
+  <div class="has-error" *ngIf="error" role="alert">
+    {{ error }}
+  </div>
+  <div class="form-group">
+    <label for="emailInput">Email:</label>
+    <input
+      type="email"
+      id="emailInput"
+      name="email"
+      class="form-control"
+      [(ngModel)]="email"
+      required
+    />
+  </div>
+  <div class="form-group">
+    <label for="passwordInput">Password:</label>
+    <input
+      type="password"
+      id="passwordInput"
+      name="password"
+      class="form-control"
+      [(ngModel)]="password"
+      required
+    />
+  </div>
+  <div class="form-control">
+    <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+      <span
+        *ngIf="isLoading"
+        class="spinner-border spinner-border-sm mr-1"
+      ></span>
+      Login
+    </button>
+  </div>
+</form>

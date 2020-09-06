@@ -1,0 +1,89 @@
+<div>
+  <div id="loansForm" class="form-group">
+    <h3>Quick Return</h3>
+    <form class="form-inline">
+      <div class="form-group">
+        <div class="input-group input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="book-return-addon">Title | Author:</span>
+          </div>
+          <input #bookReturnSearchBox id="book-return-search-box" (input)="search(bookReturnSearchBox.value)" type="text" class="form-control" placeholder="Search..." aria-label="book-return-search" aria-describedby="book-addon">
+        </div>
+        <div *ngIf="searchLoans$ | async as loans">
+          <ngb-pagination size="sm"
+            [collectionSize]="loans.length"
+            [(page)]="pager.currentPage"
+            [maxSize]="5"
+            [pageSize]="itemsPerPage"
+            [boundaryLinks]="true"
+            (pageChange)="setPage($event, loans)"
+          ></ngb-pagination>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <table class="table table-dark table-sm">
+    <thead>
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Author</th>
+        <th scope="col">Out</th>
+        <th scope="col">Due</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let loan of pagedLoans$ | async">
+        <th scope="row">{{loan.id.book.title}}</th>
+        <td>{{getBookAuthors(loan.id.book)}}</td>
+        <td>{{loan.dateOut}}</td>
+        <td>{{loan.dueDate}}</td>
+        <td>
+          <button (click)="selectLoan(loan)" type="button" class="btn btn-danger" data-toggle="modal" data-target="#returnModal">Return</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="loan" class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="returnModalLabel">Return book:</h5>
+          <button (click)="selectLoan(null)" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="book-title" class="col-form-label">TItle</label>
+              <input type="text" class="form-control" id="book-title" disabled placeholder={{loan?.id.book.title}}>
+            </div>
+            <div class="form-group">
+              <label for="book-authors" class="col-form-label">Authors</label>
+              <input type="text" class="form-control" id="book-authors" disabled placeholder={{getBookAuthors(loan.id.book)}}>
+            </div>
+            <div class="form-group">
+              <label for="book-genres" class="col-form-label">Genres</label>
+              <input type="text" class="form-control" id="book-genres" disabled placeholder={{getBookGenres(loan.id.book)}}>
+            </div>
+            <div class="form-group">
+              <label for="book-branch" class="col-form-label">Branch</label>
+              <input type="text" class="form-control" id="book-branch" disabled placeholder={{loan?.id.branch.name}}>
+            </div>
+            <div class="form-group">
+              <label for="book-dueDate" class="col-form-label">Due Date</label>
+              <input type="text" class="form-control" id="book-dueDate" disabled placeholder={{loan?.dueDate}}>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button (click)="selectLoan(null)" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button (click)="this.checkinLoan.emit(loan)" type="button" class="btn btn-danger" data-dismiss="modal">Return</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

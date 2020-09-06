@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/admin/authors']">Authors</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/admin/books']">Books</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/admin/borrowers']">Borrowers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/admin/branches']">Branches</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/admin/genres']">Genres</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/admin/loans']">Loans</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/admin/publishers']">Publishers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/admin/register']">Register</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<router-outlet></router-outlet>

@@ -1,0 +1,42 @@
+.home {
+  position: absolute;
+  top: 60px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #343A40;
+  margin: 5px;
+  display: grid;
+  grid:
+    [row1-start] "branches returns" 1fr [row1-end]
+    [row2-start] "checkout checkout" 1fr [row2-end]
+    / 1fr 1fr;
+  overflow: hidden;
+}
+
+.branches {
+  grid-area: branches;
+  margin: 2px;
+  padding: 5px;
+}
+
+.returns {
+  grid-area: returns;
+  margin: 2px;
+  padding: 5px;
+}
+
+.checkout {  
+  grid-area: checkout / 1 / checkout / -1;
+  margin: 2px;
+  padding: 5px;
+}
+
+::-webkit-scrollbar {
+    width: 2px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
+}
